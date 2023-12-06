@@ -3,7 +3,10 @@ package com.sparta_a5.ootd.comment;
 import com.sparta_a5.ootd.comment.dto.CommentRequestDTO;
 import com.sparta_a5.ootd.comment.dto.CommentResponseDTO;
 import com.sparta_a5.ootd.comment.entity.Comment;
+import com.sparta_a5.ootd.post.dto.PostResponseDto;
 import com.sparta_a5.ootd.post.entity.Post;
+import com.sparta_a5.ootd.post.repository.PostRepository;
+import com.sparta_a5.ootd.post.service.PostService;
 import com.sparta_a5.ootd.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,10 +19,13 @@ import java.util.concurrent.RejectedExecutionException;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final PostService postService;
+    private final PostRepository postRepository;
 
 
     public CommentResponseDTO createComment(CommentRequestDTO dto, User user) {
-        Post post = postService.getPost(dto.getPostId());
+        Post post = postRepository.findById(dto.getPostId()).orElseThrow(
+                ()-> new IllegalArgumentException("존재하지 않는 글입니다.")
+        );
 
         Comment comment = new Comment(dto);
         comment.setUser(user);

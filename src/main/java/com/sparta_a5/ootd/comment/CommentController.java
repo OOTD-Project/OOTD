@@ -3,9 +3,11 @@ package com.sparta_a5.ootd.comment;
 import com.sparta_a5.ootd.CommonResponseDTO;
 import com.sparta_a5.ootd.comment.dto.CommentRequestDTO;
 import com.sparta_a5.ootd.comment.dto.CommentResponseDTO;
+import com.sparta_a5.ootd.user.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.RejectedExecutionException;
@@ -26,7 +28,7 @@ public class CommentController {
 
 
     @PatchMapping("/{commentId}")
-    public ResponseEntity<CommonResponseDTO> patchComment(@PathVariable Long commentId, @RequestBody CommentRequestDTO commentRequestDTO, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<?> patchComment(@PathVariable Long commentId, @RequestBody CommentRequestDTO commentRequestDTO, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             CommentResponseDTO responseDTO = commentService.updateComment(commentId, commentRequestDTO, userDetails.getUser());
             return ResponseEntity.ok().body(responseDTO);
