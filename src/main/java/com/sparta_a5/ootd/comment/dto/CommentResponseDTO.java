@@ -1,12 +1,13 @@
 package com.sparta_a5.ootd.comment.dto;
 
+import com.sparta_a5.ootd.CommonResponseDTO;
 import com.sparta_a5.ootd.comment.entity.Comment;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class CommentResponseDTO {
+public class CommentResponseDTO extends CommonResponseDTO {
     private Long id;
     private String comment;
 
