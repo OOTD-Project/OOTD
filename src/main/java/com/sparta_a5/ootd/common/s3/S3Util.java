@@ -2,8 +2,10 @@ package com.sparta_a5.ootd.common.s3;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.S3Object;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,7 +13,7 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class S3Util {
 
@@ -27,7 +29,7 @@ public class S3Util {
             metadata.setContentLength(file.getSize());
 
             //파일명 중복 방지를 위한 UUID 생성
-            String filename = UUID.randomUUID() + getExtension(Objects.requireNonNull(file.getOriginalFilename()));
+            String filename = UUID.randomUUID() + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename()));
 
             //S3 업로드 요청
             amazonS3Client.putObject(bucket + classification, filename, file.getInputStream(), metadata);
@@ -39,8 +41,9 @@ public class S3Util {
         }
     }
 
-    public void deleteImage(String classification, String filename) {
+    public boolean deleteImage(String classification, String filename) {
         amazonS3Client.deleteObject(bucket + classification, filename);
+        return !amazonS3Client.doesObjectExist(bucket + classification, filename);
     }
 
     //이미지 접근을 위한 URL 생성
