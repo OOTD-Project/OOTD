@@ -80,10 +80,4 @@ public class JwtUtil {
 
     }
 
-    public String getUsernameFromHeader(HttpServletRequest httpServletRequest){
-        String resolvedToken = resolveToken(httpServletRequest);
-        Claims info = getUserInformToken(resolvedToken);
-
-        return info.getSubject();
-    }
 }
