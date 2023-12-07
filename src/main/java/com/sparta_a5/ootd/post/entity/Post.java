@@ -1,5 +1,6 @@
 package com.sparta_a5.ootd.post.entity;
 
+import com.sparta_a5.ootd.comment.entity.Comment;
 import com.sparta_a5.ootd.post.dto.PostRequestDto;
 import com.sparta_a5.ootd.post.timestamped.Timestamped;
 import com.sparta_a5.ootd.user.entity.User;
@@ -7,6 +8,9 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,6 +30,9 @@ public class Post extends Timestamped {
     private String content;
     @Column(nullable = false)
     private String imageURL;
+
+    @OneToMany(mappedBy = "post")
+    private List<Comment> comments = new ArrayList<>();
 
     public Post(PostRequestDto postRequestDto){
         this.title = postRequestDto.getTitle();
