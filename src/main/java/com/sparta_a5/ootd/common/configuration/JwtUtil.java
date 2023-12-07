@@ -1,4 +1,4 @@
-package com.sparta_a5.ootd.user.jwt;
+package com.sparta_a5.ootd.common.configuration;
 
 import com.sparta_a5.ootd.user.security.UserDetailsImpl;
 import io.jsonwebtoken.*;
@@ -61,9 +61,8 @@ public class JwtUtil {
 
     }
 
-    public Claims getUserInformToken(String token) {
+    public Claims getUserInfoFromToken(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody(); // 토큰 동일시 확인 과정을 거친후 Claims라는곳에 담겨있는 토큰의 Body부분을 가져온다.
-
     }
 
     public String createToken(String username) {
