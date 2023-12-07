@@ -1,36 +1,45 @@
 package com.sparta_a5.ootd.user.service;
 
+import com.sparta_a5.ootd.common.configuration.JwtUtil;
 import com.sparta_a5.ootd.user.dto.*;
 import com.sparta_a5.ootd.user.entity.User;
+import com.sparta_a5.ootd.user.entity.UserRoleEnum;
 import com.sparta_a5.ootd.user.repository.UserRepository;
 import com.sparta_a5.ootd.user.security.UserDetailsImpl;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UserService {
-        private final PasswordEncoder passwordEncoder; // password 암호화를 위해서 Spring Security의 기능중 하나인 PasswordEncoder 사용
+        private final PasswordEncoder passwordEncoder;
         private final UserRepository userRepository;
+        private final JwtUtil jwtUtil;
 
-
+    @Transactional
         public void signup(UserRequestDto userRequestDto) {
             String username = userRequestDto.getUsername();
             String password = passwordEncoder.encode(userRequestDto.getPassword());
             String email = userRequestDto.getEmail();
 
-            if (userRepository.findByUsername(username).isPresent()) {
-                throw new IllegalArgumentException("이미 존재하는 유저 입니다.");
-            }
-
-            User user = new User(username, password, email);
+        Optional<User> found = userRepository.findByUsername(username);
+        if (found.isPresent()) {
+            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
+        }
+            UserRoleEnum role = UserRoleEnum.USER;
+            /* 관리자를 부여하는 조건?*/
+            User user = new User(username, password, email, role);
             userRepository.save(user);
         }
 
-        public void login(LoginRequestDto loginRequestDto) {
+    @Transactional
+        public void login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
             String username = loginRequestDto.getUsername();
             String password = loginRequestDto.getPassword();
 
@@ -42,7 +51,13 @@ public class UserService {
             if(!passwordEncoder.matches(password, user.getPassword())) {
                 throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
             }
+            response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
         }
+
+
+        /*public void logout(User user) {
+
+        }*/
 
         @Transactional // 유저 조회
         public UserResponseDto getUserById(Long id) {
@@ -73,5 +88,5 @@ public class UserService {
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
         }
 
-    }
+}
 

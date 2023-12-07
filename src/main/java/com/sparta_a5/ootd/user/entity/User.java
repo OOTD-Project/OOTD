@@ -37,12 +37,18 @@ public class User {
     @Column
     private int weight;
 
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
 
-    public User(String username, String password, String email) { //회원가입
+
+    public User(String username, String password, String email, UserRoleEnum role) { //회원가입
         this.username = username;
         this.password = password;
         this.email = email;
+        this.role = UserRoleEnum.USER;
     }
+
 
     public void setUsername(String username) {
         this.username = username;
