@@ -49,12 +49,12 @@ public class UserController {
         return ResponseEntity.ok().body(new CommonResponseDto("로그아웃 하였습니다.", HttpStatus.OK.value()));
     } */
 
-    @GetMapping("/profile/{id}") // id로 유저 조회
-    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(userService.getUserById(id));
+    @GetMapping("/profile/{userId}") // username으로 조회
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable String userId) {
+        return ResponseEntity.ok().body(userService.getUserByUsername(userId));
     }
 
-    @PutMapping("/profile/{id}")
+    @PutMapping("/profile/{userId}") // username으로 수정
     public ResponseEntity<CommonResponseDTO> updateUser(@RequestBody UpdateRequestDto updateRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         userService.updateUser(updateRequestDto,  userDetails);
         return ResponseEntity.ok().body(new CommonResponseDTO("프로필 수정을 성공하였습니다.", HttpStatus.BAD_REQUEST.value()));

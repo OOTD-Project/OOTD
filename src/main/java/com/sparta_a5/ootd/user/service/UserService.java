@@ -51,8 +51,7 @@ public class UserService {
             if(!passwordEncoder.matches(password, user.getPassword())) {
                 throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
             }
-
-            jwtUtil.addJwtToCookie(jwtUtil.createToken(user.getUsername(), user.getRole()), response);
+            response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
         }
 
 
@@ -61,31 +60,26 @@ public class UserService {
         }*/
 
         @Transactional // 유저 조회
-        public UserResponseDto getUserById(Long id) {
-            return new UserResponseDto(getUser(id));
+        public UserResponseDto getUserByUsername(String username) {
+            return new UserResponseDto(getUsername(username));
         }
 
         @Transactional
         public UserResponseDto updateUser(UpdateRequestDto updateRequestDto, UserDetailsImpl userDetails) {
-            User user = getUser(updateRequestDto.getId());
+            User user = getUsername(updateRequestDto.getUsername());
 
             user.setUsername(updateRequestDto.getUsername());
+            user.setEmail(updateRequestDto.getEmail());
             user.setIntro(updateRequestDto.getIntro());
             user.setAge(updateRequestDto.getAge());
             user.setHeight(updateRequestDto.getHeight());
             user.setWeight(updateRequestDto.getWeight());
 
-            if (!updateRequestDto.getCheckPassword().equals(updateRequestDto.getPassword())){
-                throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-            }user.setPassword(passwordEncoder.encode(updateRequestDto.getPassword()));
-
-
-
             return new UserResponseDto(user);
         }
 
-        private User getUser(Long id) { // id로 유저찾기 메서드
-            return userRepository.findById(id)
+        private User getUsername(String username) { // id로 유저찾기 메서드
+            return userRepository.findByUsername(username)
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
         }
 
