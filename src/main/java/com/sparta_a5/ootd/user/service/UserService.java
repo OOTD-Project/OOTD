@@ -70,6 +70,11 @@ public class UserService {
 
             user.setUsername(updateRequestDto.getUsername());
             user.setEmail(updateRequestDto.getEmail());
+
+            if (!updateRequestDto.getCheckPassword().equals(updateRequestDto.getPassword())){
+                throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            }user.setPassword(passwordEncoder.encode(updateRequestDto.getPassword()));
+
             user.setIntro(updateRequestDto.getIntro());
             user.setAge(updateRequestDto.getAge());
             user.setHeight(updateRequestDto.getHeight());
