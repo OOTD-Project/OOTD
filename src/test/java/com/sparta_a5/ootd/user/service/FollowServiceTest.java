@@ -1,5 +1,6 @@
 package com.sparta_a5.ootd.user.service;
 
+import com.sparta_a5.ootd.common.s3.S3Util;
 import com.sparta_a5.ootd.user.entity.Follow;
 import com.sparta_a5.ootd.user.repository.FollowQueryRepository;
 import com.sparta_a5.ootd.user.repository.FollowRepository;
@@ -31,11 +32,14 @@ class FollowServiceTest implements CommonTest {
     @Mock
     UserRepository userRepository;
 
+    @Mock
+    S3Util s3Util;
+
     @Test
     @DisplayName("팔로우 생성 성공")
     public void createFollow_success() {
         //given
-        FollowService followService = new FollowService(followRepository, followQueryRepository, userRepository);
+        FollowService followService = new FollowService(followRepository, followQueryRepository, userRepository, s3Util);
         given(userRepository.findById(TEST_ANOTHER_USER_ID)).willReturn(Optional.of(TEST_ANOTHER_USER));
 
         //when

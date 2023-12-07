@@ -33,6 +33,7 @@ public class FollowQueryRepository {
          return query
                 .select(QFollow.follow)
                 .from(QFollow.follow)
+                .innerJoin(QFollow.follow.following).fetchJoin()
                 .innerJoin(QFollow.follow.follower).fetchJoin()
                 .where(builder)
                 .orderBy(order)

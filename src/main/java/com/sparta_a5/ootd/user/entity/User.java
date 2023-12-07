@@ -37,6 +37,9 @@ public class User {
     @Column
     private int weight;
 
+    @Column
+    private String filename;
+
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
@@ -47,6 +50,7 @@ public class User {
         this.password = password;
         this.email = email;
         this.role = UserRoleEnum.USER;
+        this.filename = "default_image.png";
     }
 
 
