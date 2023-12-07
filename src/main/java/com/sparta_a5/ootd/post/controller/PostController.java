@@ -1,11 +1,11 @@
 package com.sparta_a5.ootd.post.controller;
 
+import com.sparta_a5.ootd.common.configuration.JwtUtil;
 import com.sparta_a5.ootd.common.s3.S3Util;
 import com.sparta_a5.ootd.post.dto.PostRequestDto;
 import com.sparta_a5.ootd.post.dto.PostResponseDto;
 import com.sparta_a5.ootd.post.service.PostService;
 import com.sparta_a5.ootd.user.entity.User;
-import com.sparta_a5.ootd.user.jwt.JwtUtil;
 import com.sparta_a5.ootd.user.security.UserDetailsImpl;
 import com.sparta_a5.ootd.user.security.UserDetailsService;
 import io.jsonwebtoken.Claims;
@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.sparta_a5.ootd.common.s3.S3Const.S3_DIR_POST;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/posts")
@@ -29,12 +31,13 @@ public class PostController {
     private final S3Util s3Util;
 
     @PostMapping("")
-    public ResponseEntity<PostResponseDto> createPost(@RequestBody PostRequestDto postRequestDto,
-                                                      HttpServletRequest httpServletRequest){
+    public ResponseEntity<PostResponseDto> createPost(
+            @ModelAttribute PostRequestDto postRequestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
 
-        String username = jwtUtil.getUsernameFromHeader(httpServletRequest);
-        UserDetailsImpl userDetails = userDetailsService.getUserDetails(username);
-        String filename = s3Util.uploadImage(postRequestDto.getFilename());
+        String filename = s3Util.uploadImage(S3_DIR_POST,postRequestDto.getImageFile());
+        postRequestDto.setFilename(filename);
         PostResponseDto postResponseDto = postService.createPost(postRequestDto, userDetails.getUser());
         return ResponseEntity.ok(postResponseDto);
     }
@@ -52,23 +55,24 @@ public class PostController {
     }
 
     @PatchMapping("/{postId}")
-    public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long postId,
-                                                      @RequestBody PostRequestDto postRequestDto,
-                                                      HttpServletRequest httpServletRequest) {
+    public ResponseEntity<PostResponseDto> updatePost(
+            @PathVariable Long postId,
+            @ModelAttribute PostRequestDto postRequestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
 
-        String username = jwtUtil.getUsernameFromHeader(httpServletRequest);
-        UserDetailsImpl userDetails = userDetailsService.getUserDetails(username);
         PostResponseDto postResponseDto = postService.updatePost(postId, postRequestDto,userDetails.getUser());
         return ResponseEntity.ok(postResponseDto);
     }
 
     @DeleteMapping("/{postId}")
-    public ResponseEntity<List<PostResponseDto>> deletePost(@PathVariable Long postId,
-                                                            HttpServletRequest httpServletRequest){
+    public ResponseEntity<List<PostResponseDto>> deletePost(
+            @PathVariable Long postId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
 
-        String username = jwtUtil.getUsernameFromHeader(httpServletRequest);
-        UserDetailsImpl userDetails = userDetailsService.getUserDetails(username);
         postService.deletePost(postId,userDetails.getUser());
+
         List<PostResponseDto> postResponseDtoList = postService.getPostList();
         return ResponseEntity.ok(postResponseDtoList);
     }

@@ -1,5 +1,6 @@
 package com.sparta_a5.ootd.post.service;
 
+import com.sparta_a5.ootd.common.s3.S3Util;
 import com.sparta_a5.ootd.post.dto.PostRequestDto;
 import com.sparta_a5.ootd.post.dto.PostResponseDto;
 import com.sparta_a5.ootd.post.entity.Post;
@@ -11,11 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.sparta_a5.ootd.common.s3.S3Const.S3_DIR_POST;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
 
     private final PostRepository postRepository;
+    private final S3Util s3Util;
 
 
     @Transactional
@@ -38,7 +42,9 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(
                 ()-> new IllegalArgumentException("존재하지 않는 글입니다.")
         );
-        return new PostResponseDto(post);
+        String filenname = post.getFilename();
+        String imageURL = s3Util.getImageURL(S3_DIR_POST,filenname);
+        return new PostResponseDto(post,imageURL);
     }
 
     @Transactional
@@ -47,9 +53,17 @@ public class PostService {
                  ()-> new IllegalArgumentException("존재하지 않는 글입니다.")
          );
 
-         if(post.getUser() == user){
+         if(post.getUser().getId().equals(user.getId())){
+             String filename = post.getFilename();
+             s3Util.deleteImage(S3_DIR_POST,filename);
+
+             String newFilename = s3Util.uploadImage(S3_DIR_POST,postRequestDto.getImageFile());
+             postRequestDto.setFilename(newFilename);
              post.update(postRequestDto);
-             return new PostResponseDto(post);
+
+
+
+             return new PostResponseDto(post,newFilename);
          } else {
              throw new IllegalArgumentException("권한이 없습니다.");
          }
@@ -59,8 +73,10 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(
                 ()-> new IllegalArgumentException("존재하지 않는 글입니다.")
         );
-        if(post.getUser() == user){
+        if(post.getUser().getId().equals(user.getId())){
             postRepository.delete(post);
+            String filename = post.getFilename();
+            s3Util.deleteImage(S3_DIR_POST,filename);
         } else {
             throw new IllegalArgumentException("권한이 없습니다.");
         }
