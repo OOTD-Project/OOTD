@@ -1,5 +1,6 @@
 package com.sparta_a5.ootd.user.jwt;
 
+import com.sparta_a5.ootd.user.security.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -78,5 +79,12 @@ public class JwtUtil {
                         .signWith(key, signatureAlgorithm) // 어떤 알고리즘으로 암호화했는가
                         .compact();
 
+    }
+
+    public String getUsernameFromHeader(HttpServletRequest httpServletRequest){
+        String resolvedToken = resolveToken(httpServletRequest);
+        Claims info = getUserInformToken(resolvedToken);
+
+        return info.getSubject();
     }
 }
