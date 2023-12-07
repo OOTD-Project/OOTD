@@ -40,11 +40,11 @@ dependencies {
     // Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    //s3
+    // S3
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.232'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
-    //QueryDSL
+    // QueryDSL
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
@@ -54,6 +54,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mockito:mockito-core'
 }
 
 tasks.named('test') {

@@ -51,7 +51,8 @@ public class UserService {
             if(!passwordEncoder.matches(password, user.getPassword())) {
                 throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
             }
-            response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
+
+            jwtUtil.addJwtToCookie(jwtUtil.createToken(user.getUsername(), user.getRole()), response);
         }
 
 

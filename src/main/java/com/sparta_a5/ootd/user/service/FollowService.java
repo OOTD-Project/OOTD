@@ -27,9 +27,8 @@ public class FollowService {
 
     @Transactional
     public Follow createFollow(User user, Long followUserId) {
-        User followUser = userRepository.findById(followUserId).orElseThrow(
-                () -> new IllegalArgumentException("해당 유저가 없습니다.")
-        );
+        User followUser = userRepository.findById(followUserId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 없습니다."));
 
         Follow follow = Follow.builder()
                             .following(user)
