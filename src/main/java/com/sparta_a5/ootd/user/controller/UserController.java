@@ -1,7 +1,7 @@
 package com.sparta_a5.ootd.user.controller;
 
+import com.sparta_a5.ootd.common.configuration.JwtUtil;
 import com.sparta_a5.ootd.user.dto.*;
-import com.sparta_a5.ootd.user.jwt.JwtUtil;
 import com.sparta_a5.ootd.user.security.UserDetailsImpl;
 import com.sparta_a5.ootd.user.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
