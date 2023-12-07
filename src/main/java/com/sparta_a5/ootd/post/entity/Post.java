@@ -29,20 +29,21 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private String content;
     @Column(nullable = false)
-    private String imageURL;
+    private String filename;
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments = new ArrayList<>();
 
-    public Post(PostRequestDto postRequestDto){
+    public Post(PostRequestDto postRequestDto, User user){
+        this.user = user;
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
-        this.imageURL = postRequestDto.getImageURL();
+        this.filename = postRequestDto.getFilename();
     }
 
     public void update(PostRequestDto postRequestDto) {
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
-        this.imageURL = postRequestDto.getImageURL();
+        this.filename = postRequestDto.getFilename();
     }
 }
