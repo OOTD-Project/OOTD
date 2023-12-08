@@ -16,13 +16,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 유저 ID값 적용
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String username;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column
@@ -44,13 +44,28 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+    private Long kakaoId;
 
-    public User(String username, String password, String email, UserRoleEnum role) { //회원가입
+    public User(String username, String email , String password, UserRoleEnum role) { //회원가입
         this.username = username;
-        this.password = password;
         this.email = email;
+        this.password = password;
         this.role = UserRoleEnum.USER;
         this.filename = "default_image.png";
+    }
+
+    public User(String username, String email, String password, UserRoleEnum role, Long kakaoId) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.kakaoId =kakaoId;
+    }
+
+
+    public User kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
     }
 
 
@@ -62,5 +77,6 @@ public class User {
     public void setAge(int age) { this.age = age; }
     public void setHeight(int height) { this.height = height; }
     public void setWeight(int weight) { this.weight = weight; }
+
 
 }

@@ -8,18 +8,17 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserRequestDto {
-    @Pattern(regexp = "^[a-z0-9]{4,10}")
-    private String username;
+    @Email
+    private String email;
 
     @Pattern(regexp = "^[a-zA-Z0-9]{8,15}")
     private String password;
 
-    @Email
-    private String email;
+    private String username;
 
     private String intro;
 
-    private int age; // 나이제한고민중
+    private int age;
 
     private int height;
 
