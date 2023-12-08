@@ -59,7 +59,4 @@ public class UserController {
         userService.updateUser(updateRequestDto,  userDetails);
         return ResponseEntity.ok().body(new CommonResponseDTO("프로필 수정을 성공하였습니다.", HttpStatus.BAD_REQUEST.value()));
     }
-
-
-
 }
