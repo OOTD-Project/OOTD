@@ -37,22 +37,27 @@ public class User {
     @Column
     private int weight;
 
+    @Column
+    private String filename;
 
-    public User(String username, String password, String email) { //회원가입
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
+
+
+    public User(String username, String password, String email, UserRoleEnum role) { //회원가입
         this.username = username;
         this.password = password;
         this.email = email;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+        this.role = UserRoleEnum.USER;
+        this.filename = "default_image.png";
     }
 
 
+    public void setUsername(String username) { this.username = username; }
+    public void setEmail(String email) { this.email = email; }
+
+    public void setPassword(String password) { this.password = password; }
     public void setIntro(String intro) { this.intro = intro; }
     public void setAge(int age) { this.age = age; }
     public void setHeight(int height) { this.height = height; }
