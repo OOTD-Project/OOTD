@@ -7,8 +7,11 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -21,6 +24,21 @@ public class Comment {
     @Column
     private String content;
 
+    // 삭제 유무
+    // true : 삭제된 댓글(default는 false)
+    @ColumnDefault("FALSE")
+    @Column(nullable = false)
+    private Boolean isDeleted;
+
+    // 부모 댓글
+    // null일 경우 최상위 댓글
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Comment parent;
+
+    @OneToMany(mappedBy = "parent", orphanRemoval = true) // 부모 댓글이 자식 댓글을 삭제하면 자식 댓글이 DB에서 삭제됨
+    private List<Comment> children = new ArrayList<>(); // List로 저장(댓글에 대댓글 여러개 가능)
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -29,7 +47,6 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    // create_at 추가
     @Column
     private LocalDateTime created_at;
 
@@ -51,4 +68,11 @@ public class Comment {
         this.content = comment;
     }
 
+    public void updateParent(Comment comment) {
+        this.parent = comment;
+    }
+
+    public void changeIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
 }
