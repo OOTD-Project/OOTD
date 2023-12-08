@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
     private final KakaoService kakaoService;
-
+    private final JwtUtil jwtUtil;
     @PostMapping("/signup")
     public ResponseEntity<CommonResponseDTO> signup(@Valid @RequestBody UserRequestDto userRequestDto) {
         try {
@@ -58,7 +58,7 @@ public class UserController {
         return ResponseEntity.ok().body(new CommonResponseDTO("프로필 수정을 성공하였습니다.", HttpStatus.BAD_REQUEST.value()));
     }
 
- /*   @GetMapping("/user/kakao/callback")
+  @GetMapping("/kakao/callback")
     public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         String token = kakaoService.kakaoLogin(code);
 
@@ -67,7 +67,7 @@ public class UserController {
         response.addCookie(cookie);
 
         return "redirect:/";
-    }*/
+    }
 
 
 }
