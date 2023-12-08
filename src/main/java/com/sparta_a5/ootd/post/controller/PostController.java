@@ -33,8 +33,7 @@ public class PostController {
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
 
-        String filename = s3Util.uploadImage(S3_DIR_POST,postRequestDto.getImageFile());
-        postRequestDto.setFilename(filename);
+
         PostResponseDto postResponseDto = postService.createPost(postRequestDto, userDetails.getUser());
         return ResponseEntity.ok(postResponseDto);
     }

@@ -25,6 +25,8 @@ public class PostService {
     @Transactional
     public PostResponseDto createPost(PostRequestDto postRequestDto, User user) {
 
+        String filename = s3Util.uploadImage(S3_DIR_POST,postRequestDto.getImageFile());
+        postRequestDto.setFilename(filename);
         Post post = postRepository.save(new Post(postRequestDto,user));
         return new PostResponseDto(post);
     }
