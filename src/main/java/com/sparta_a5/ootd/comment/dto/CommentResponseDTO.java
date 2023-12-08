@@ -18,7 +18,7 @@ public class CommentResponseDTO extends CommonResponseDTO {
 
     public CommentResponseDTO(Comment comment) {
         this.id = comment.getId();
-        this.comment = comment.getComment();
+        this.comment = comment.getContent();
         this.created_at = comment.getCreated_at(); // created_at 추가
     }
 }

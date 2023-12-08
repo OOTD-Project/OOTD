@@ -19,7 +19,7 @@ public class Comment {
     private Long id;
 
     @Column
-    private String comment;
+    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -34,7 +34,7 @@ public class Comment {
     private LocalDateTime created_at;
 
     public Comment(CommentRequestDTO dto) {
-        this.comment = dto.getComment();
+        this.content = dto.getComment();
         this.created_at = LocalDateTime.now();
     }
 
@@ -47,8 +47,8 @@ public class Comment {
         post.getComments().add(this);
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setContent(String comment) {
+        this.content = comment;
     }
 
 }
