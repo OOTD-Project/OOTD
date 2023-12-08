@@ -12,16 +12,15 @@ import java.util.Collection;
 
 @Getter
 public class UserDetailsImpl implements UserDetails {
+
     private final User user;
 
     public UserDetailsImpl(User user) {
         this.user = user;
     }
 
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
+    public User getUser() {
+        return user;
     }
 
     @Override
@@ -34,7 +33,17 @@ public class UserDetailsImpl implements UserDetails {
         return user.getUsername();
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        UserRoleEnum role = user.getRole();
+        String authority = role.getAuthority();
 
+        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(simpleGrantedAuthority);
+
+        return authorities;
+    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -55,5 +64,4 @@ public class UserDetailsImpl implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }
