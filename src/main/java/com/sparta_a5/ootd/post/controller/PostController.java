@@ -7,7 +7,6 @@ import com.sparta_a5.ootd.post.dto.PostResponseDto;
 import com.sparta_a5.ootd.post.service.PostService;
 import com.sparta_a5.ootd.user.entity.User;
 import com.sparta_a5.ootd.user.security.UserDetailsImpl;
-import com.sparta_a5.ootd.user.security.UserDetailsService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +25,6 @@ import static com.sparta_a5.ootd.common.s3.S3Const.S3_DIR_POST;
 public class PostController {
 
     private final PostService postService;
-    private final JwtUtil jwtUtil;
-    private final UserDetailsService userDetailsService;
     private final S3Util s3Util;
 
     @PostMapping("")
