@@ -1,6 +1,7 @@
 package com.sparta_a5.ootd.user.entity;
 
 
+import com.sparta_a5.ootd.post.timestamped.Timestamped;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @NoArgsConstructor
-public class User {
+public class User extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -78,5 +79,8 @@ public class User {
     public void setHeight(int height) { this.height = height; }
     public void setWeight(int weight) { this.weight = weight; }
 
+    public void setUserRole(UserRoleEnum userRole){
+        this.role = userRole;
+    }
 
 }
