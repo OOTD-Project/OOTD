@@ -12,13 +12,11 @@ import java.time.LocalDateTime;
 public class CommentResponseDTO extends CommonResponseDTO {
     private Long id;
     private String comment;
-
-    // created_at 추가
     private LocalDateTime created_at;
 
     public CommentResponseDTO(Comment comment) {
         this.id = comment.getId();
         this.comment = comment.getContent();
-        this.created_at = comment.getCreated_at(); // created_at 추가
+        this.created_at = comment.getCreated_at();
     }
 }

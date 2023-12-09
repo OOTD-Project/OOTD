@@ -18,7 +18,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id;
 
     @Column
@@ -30,6 +32,10 @@ public class Comment {
     @Column(nullable = false)
     private Boolean isDeleted;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     // 부모 댓글
     // null일 경우 최상위 댓글
     @ManyToOne(fetch = FetchType.LAZY)
@@ -40,10 +46,6 @@ public class Comment {
     private List<Comment> children = new ArrayList<>(); // List로 저장(댓글에 대댓글 여러개 가능)
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
@@ -51,7 +53,7 @@ public class Comment {
     private LocalDateTime created_at;
 
     public Comment(CommentRequestDTO dto) {
-        this.content = dto.getComment();
+        this.content = dto.getContent();
         this.created_at = LocalDateTime.now();
     }
 

@@ -8,5 +8,10 @@ import lombok.Setter;
 public class CommentRequestDTO {
     private Long userId;
     private Long postId;
-    private String comment;
+    private String content;
+    private Long parentId;
+
+    public CommentRequestDTO(String content) {
+        this.content = content;
+    }
 }
