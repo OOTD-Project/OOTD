@@ -7,13 +7,13 @@ import com.sparta_a5.ootd.post.dto.PostResponseDto;
 import com.sparta_a5.ootd.post.service.PostService;
 import com.sparta_a5.ootd.user.entity.User;
 import com.sparta_a5.ootd.user.security.UserDetailsImpl;
-import com.sparta_a5.ootd.user.security.UserDetailsService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +27,6 @@ public class PostController {
 
     private final PostService postService;
     private final JwtUtil jwtUtil;
-    private final UserDetailsService userDetailsService;
     private final S3Util s3Util;
 
     @PostMapping("")

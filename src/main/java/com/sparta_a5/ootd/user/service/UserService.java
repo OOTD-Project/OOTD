@@ -24,26 +24,27 @@ public class UserService {
 
     @Transactional
         public void signup(UserRequestDto userRequestDto) {
-            String username = userRequestDto.getUsername();
-            String password = passwordEncoder.encode(userRequestDto.getPassword());
-            String email = userRequestDto.getEmail();
+           String username = userRequestDto.getUsername();
+           String email = userRequestDto.getEmail();
+           String password = passwordEncoder.encode(userRequestDto.getPassword());
 
-        Optional<User> found = userRepository.findByUsername(username);
+
+        Optional<User> found = userRepository.findByEmail(email);
         if (found.isPresent()) {
             throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
         }
             UserRoleEnum role = UserRoleEnum.USER;
-            /* 관리자를 부여하는 조건?*/
-            User user = new User(username, password, email, role);
+
+            User user = new User(username, email, password, role);
             userRepository.save(user);
         }
 
     @Transactional
         public void login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
-            String username = loginRequestDto.getUsername();
+            String email = loginRequestDto.getEmail();
             String password = loginRequestDto.getPassword();
 
-            User user = userRepository.findByUsername(username)
+            User user = userRepository.findByEmail(email)
                     .orElseThrow(()-> new IllegalArgumentException("등록된 유저가 없습니다."));
             System.out.println(password);
             System.out.println(user.getPassword());
@@ -51,25 +52,22 @@ public class UserService {
             if(!passwordEncoder.matches(password, user.getPassword())) {
                 throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
             }
-            response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
+
+          jwtUtil.addJwtToCookie(jwtUtil.createToken(user.getUsername(), user.getRole()), response);
+
         }
 
 
-        /*public void logout(User user) {
-
-        }*/
-
-        @Transactional // 유저 조회
-        public UserResponseDto getUserByUsername(String username) {
-            return new UserResponseDto(getUsername(username));
-        }
+    @Transactional // 유저 조회
+    public UserResponseDto getUserById(Long userId) {
+        return new UserResponseDto(getUser(userId));
+    }
 
         @Transactional
         public UserResponseDto updateUser(UpdateRequestDto updateRequestDto, UserDetailsImpl userDetails) {
-            User user = getUsername(updateRequestDto.getUsername());
+            User user = getUser(updateRequestDto.getId());
 
             user.setUsername(updateRequestDto.getUsername());
-            user.setEmail(updateRequestDto.getEmail());
 
             if (!updateRequestDto.getCheckPassword().equals(updateRequestDto.getPassword())){
                 throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
@@ -83,10 +81,10 @@ public class UserService {
             return new UserResponseDto(user);
         }
 
-        private User getUsername(String username) { // id로 유저찾기 메서드
-            return userRepository.findByUsername(username)
-                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
-        }
+    private User getUser(Long id) { // id로 유저찾기 메서드
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 유저입니다."));
+    }
 
 }
 
