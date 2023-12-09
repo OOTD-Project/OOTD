@@ -29,8 +29,13 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    // create_at 추가
+    @Column
+    private LocalDateTime created_at;
+
     public Comment(CommentRequestDTO dto) {
         this.comment = dto.getComment();
+        this.created_at = LocalDateTime.now();
     }
 
     public void setUser(User user) {
