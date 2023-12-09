@@ -27,6 +27,11 @@ public class AdminController {
         adminService.adminLogin(loginRequestDto, response);
     }
 
+    @PostMapping("/user/search")
+    public ResponseEntity<List<UserResponseDto>> getUserList(@RequestBody SearchRequestDto searchRequestDto){
+        return ResponseEntity.ok(adminService.getUserList(searchRequestDto));
+    }
+
     @PatchMapping("/user/{userId}")
     public ResponseEntity<UserResponseDto> updateUserRole(@PathVariable Long userId,
                                                          @RequestBody AdminUpdateRequestDto requestDto,
@@ -44,11 +49,6 @@ public class AdminController {
     @PostMapping("/post/search")
     public ResponseEntity<List<PostResponseDto>> getPostList(@RequestBody SearchRequestDto searchRequestDto){
         return ResponseEntity.ok(adminService.getPostList(searchRequestDto));
-    }
-
-    @PostMapping("/user/search")
-    public ResponseEntity<List<UserResponseDto>> getUserList(@RequestBody SearchRequestDto searchRequestDto){
-        return ResponseEntity.ok(adminService.getUserList(searchRequestDto));
     }
 
     @DeleteMapping("/post/{postId}")

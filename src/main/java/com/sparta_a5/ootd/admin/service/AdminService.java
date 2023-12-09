@@ -56,6 +56,25 @@ public class AdminService {
         jwtUtil.addJwtToCookie(jwtUtil.createToken(user.getUsername(),user.getRole()),response);
     }
 
+
+    public List<UserResponseDto> getUserList(SearchRequestDto searchRequestDto) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if(searchRequestDto.getClassification().equals("username")){
+            builder.and(QUser.user.username.eq(searchRequestDto.getKeyword()))
+                    .and(QUser.user.createdAt.between(searchRequestDto.getStartDate(),searchRequestDto.getEndDate()));
+        } else if (searchRequestDto.getClassification().equals("email")){
+            builder.and(QUser.user.email.contains(searchRequestDto.getKeyword()))
+                    .and(QUser.user.createdAt.between(searchRequestDto.getStartDate(),searchRequestDto.getEndDate()));
+        }
+
+        List<User> userList = userQueryRepository.findAll(builder);
+        return userList.stream().map(user -> UserResponseDto.builder()
+                .user(user)
+                .build()
+        ).toList();
+    }
+
     @Transactional
     public UserResponseDto updateUserRole(Long userId, AdminUpdateRequestDto requestDto, User adminUser) {
 
@@ -72,20 +91,6 @@ public class AdminService {
     }
 
     @Transactional
-    public void deletePost(Long postId, User adminUser) {
-
-        if(adminUser.getRole() != ADMIN){
-            throw new IllegalArgumentException("권한이 없습니다.");
-        }
-
-        Post post = postRepository.findById(postId).orElseThrow(
-                ()-> new IllegalArgumentException("존재하지 않는 사용자입니다.")
-        );
-
-        postRepository.delete(post);
-    }
-
-    @Transactional
     public void deleteUser(Long userId, User adminUser) {
 
         if(adminUser.getRole() != ADMIN){
@@ -97,24 +102,6 @@ public class AdminService {
         );
 
         userRepository.delete(user);
-    }
-
-    public List<UserResponseDto> getUserList(SearchRequestDto searchRequestDto) {
-        BooleanBuilder builder = new BooleanBuilder();
-
-       if(searchRequestDto.getClassification().equals("username")){
-            builder.and(QUser.user.username.eq(searchRequestDto.getKeyword()))
-                    .and(QUser.user.createdAt.between(searchRequestDto.getStartDate(),searchRequestDto.getEndDate()));
-       } else if (searchRequestDto.getClassification().equals("email")){
-           builder.and(QUser.user.email.contains(searchRequestDto.getKeyword()))
-                   .and(QUser.user.createdAt.between(searchRequestDto.getStartDate(),searchRequestDto.getEndDate()));
-       }
-
-        List<User> userList = userQueryRepository.findAll(builder);
-        return userList.stream().map(user -> UserResponseDto.builder()
-                .user(user)
-                .build()
-        ).toList();
     }
 
     public List<PostResponseDto> getPostList(SearchRequestDto searchRequestDto) {
@@ -138,4 +125,19 @@ public class AdminService {
                 .build()
         ).toList();
     }
+
+    @Transactional
+    public void deletePost(Long postId, User adminUser) {
+
+        if(adminUser.getRole() != ADMIN){
+            throw new IllegalArgumentException("권한이 없습니다.");
+        }
+
+        Post post = postRepository.findById(postId).orElseThrow(
+                ()-> new IllegalArgumentException("존재하지 않는 사용자입니다.")
+        );
+
+        postRepository.delete(post);
+    }
+
 }
