@@ -23,7 +23,7 @@ public class UserService {
         private final JwtUtil jwtUtil;
 
     @Transactional
-        public void signup(UserRequestDto userRequestDto) {
+        public UserResponseDto signup(UserRequestDto userRequestDto) {
            String username = userRequestDto.getUsername();
            String email = userRequestDto.getEmail();
            String password = passwordEncoder.encode(userRequestDto.getPassword());
@@ -37,10 +37,11 @@ public class UserService {
 
             User user = new User(username, email, password, role);
             userRepository.save(user);
+        return new UserResponseDto(user);
         }
 
     @Transactional
-        public void login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+        public UserResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
             String email = loginRequestDto.getEmail();
             String password = loginRequestDto.getPassword();
 
@@ -54,7 +55,7 @@ public class UserService {
             }
 
           jwtUtil.addJwtToCookie(jwtUtil.createToken(user.getUsername(), user.getRole()), response);
-
+        return new UserResponseDto(user);
         }
 
 
