@@ -44,7 +44,7 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    private Long kakaoId;
+    private Long socialId;
 
     public User(String username, String email , String password, UserRoleEnum role) { //회원가입
         this.username = username;
@@ -54,17 +54,17 @@ public class User {
         this.filename = "default_image.png";
     }
 
-    public User(String username, String email, String password, UserRoleEnum role, Long kakaoId) {
+    public User(String username, String email, String password, UserRoleEnum role, Long socialId) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
-        this.kakaoId =kakaoId;
+        this.socialId =socialId;
     }
 
 
-    public User kakaoIdUpdate(Long kakaoId) {
-        this.kakaoId = kakaoId;
+    public User socialIdUpdate(Long socialId) {
+        this.socialId = socialId;
         return this;
     }
 
