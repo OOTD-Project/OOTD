@@ -2,6 +2,7 @@ package com.sparta_a5.ootd.post.dto;
 
 import com.sparta_a5.ootd.common.s3.S3Util;
 import com.sparta_a5.ootd.post.entity.Post;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,6 +18,7 @@ public class PostResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
+    @Builder
     public PostResponseDto(Post post) {
         this.postId = post.getId();
         this.userId = post.getUser().getUsername();
@@ -35,4 +37,5 @@ public class PostResponseDto {
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
     }
+
 }
