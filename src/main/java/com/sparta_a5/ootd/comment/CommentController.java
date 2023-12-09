@@ -28,7 +28,10 @@ public class CommentController {
 
 
     @PatchMapping("/{commentId}")
-    public ResponseEntity<?> patchComment(@PathVariable Long commentId, @RequestBody CommentRequestDTO commentRequestDTO, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    // 변경 전: ResponseEntity<?>
+    // ------ public class CommentResponseDTO extends CommonResponseDTO ----
+    // 변경 후: ResponseEntity<CommonResponseDTO>
+    public ResponseEntity<CommonResponseDTO> patchComment(@PathVariable Long commentId, @RequestBody CommentRequestDTO commentRequestDTO, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             CommentResponseDTO responseDTO = commentService.updateComment(commentId, commentRequestDTO, userDetails.getUser());
             return ResponseEntity.ok().body(responseDTO);

@@ -1,10 +1,13 @@
 package com.sparta_a5.ootd.user.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparta_a5.ootd.CommonResponseDTO;
 import com.sparta_a5.ootd.user.dto.*;
 import com.sparta_a5.ootd.common.configuration.JwtUtil;
 import com.sparta_a5.ootd.user.security.UserDetailsImpl;
+import com.sparta_a5.ootd.user.service.KakaoService;
 import com.sparta_a5.ootd.user.service.UserService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -19,7 +22,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-
+    private final KakaoService kakaoService;
+    private final JwtUtil jwtUtil;
     @PostMapping("/signup")
     public ResponseEntity<CommonResponseDTO> signup(@Valid @RequestBody UserRequestDto userRequestDto) {
         try {
@@ -43,23 +47,27 @@ public class UserController {
         return ResponseEntity.ok().body(new CommonResponseDTO("로그인에 성공하였습니다.", HttpStatus.OK.value()));
     }
 
-    /*@PostMapping("/logout")
-    public ResponseEntity<CommonResponseDto> logout(HttpServletRequest request) {
-        userService.logout(request);
-        return ResponseEntity.ok().body(new CommonResponseDto("로그아웃 하였습니다.", HttpStatus.OK.value()));
-    } */
-
-    @GetMapping("/profile/{userId}") // username으로 조회
-    public ResponseEntity<UserResponseDto> getUserById(@PathVariable String userId) {
-        return ResponseEntity.ok().body(userService.getUserByUsername(userId));
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long userId) {
+        return ResponseEntity.ok().body(userService.getUserById(userId));
     }
 
-    @PutMapping("/profile/{userId}") // username으로 수정
+    @PutMapping("/profile/{userId}")
     public ResponseEntity<CommonResponseDTO> updateUser(@RequestBody UpdateRequestDto updateRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         userService.updateUser(updateRequestDto,  userDetails);
         return ResponseEntity.ok().body(new CommonResponseDTO("프로필 수정을 성공하였습니다.", HttpStatus.BAD_REQUEST.value()));
     }
 
+  @GetMapping("/kakao/callback")
+    public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+        String token = kakaoService.kakaoLogin(code);
+
+        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
+        return "redirect:/";
+    }
 
 
 }

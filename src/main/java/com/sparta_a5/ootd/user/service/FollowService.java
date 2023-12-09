@@ -12,6 +12,7 @@ import com.sparta_a5.ootd.user.repository.FollowQueryRepository;
 import com.sparta_a5.ootd.user.repository.FollowRepository;
 import com.sparta_a5.ootd.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j(topic = "FollowService")
 public class FollowService {
 
     private final FollowRepository followRepository;

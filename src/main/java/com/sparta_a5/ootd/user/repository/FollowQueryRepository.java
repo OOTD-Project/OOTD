@@ -37,7 +37,7 @@ public class FollowQueryRepository {
                 .innerJoin(QFollow.follow.follower).fetchJoin()
                 .where(builder)
                 .orderBy(order)
-                .offset(offset)
+                .offset((offset-1) * limit)
                 .limit(limit)
                 .fetch();
     }

@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserResponseDto {
+    private Long id;
     private String username;
     private String password; //response 확인용
     private String email;
@@ -18,6 +19,7 @@ public class UserResponseDto {
     private int weight;
 
     public UserResponseDto(User user) {
+        this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.email = user.getEmail();
