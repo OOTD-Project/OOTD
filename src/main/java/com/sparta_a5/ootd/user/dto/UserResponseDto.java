@@ -12,8 +12,9 @@ import lombok.Setter;
 public class UserResponseDto {
     private Long id;
     private String username;
-    private String password; //response 확인용
+    private String password;
     private String email;
+    private String imageURL;
     private String intro;
     private int age;
     private int height;
@@ -25,6 +26,18 @@ public class UserResponseDto {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.email = user.getEmail();
+        this.intro = user.getIntro();
+        this.age = user.getAge();
+        this.height = user.getHeight();
+        this.weight = user.getWeight();
+    }
+
+    public UserResponseDto(User user, String imageURL) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.email = user.getEmail();
+        this.imageURL = imageURL;
         this.intro = user.getIntro();
         this.age = user.getAge();
         this.height = user.getHeight();
