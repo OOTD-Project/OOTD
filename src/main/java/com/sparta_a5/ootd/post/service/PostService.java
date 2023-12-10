@@ -25,6 +25,8 @@ public class PostService {
     @Transactional
     public PostResponseDto createPost(PostRequestDto postRequestDto, User user) {
 
+        String filename = s3Util.uploadImage(S3_DIR_POST,postRequestDto.getImageFile());
+        postRequestDto.setFilename(filename);
         Post post = postRepository.save(new Post(postRequestDto,user));
         return new PostResponseDto(post);
     }
@@ -42,8 +44,8 @@ public class PostService {
         Post post = postRepository.findById(postId).orElseThrow(
                 ()-> new IllegalArgumentException("존재하지 않는 글입니다.")
         );
-        String filenname = post.getFilename();
-        String imageURL = s3Util.getImageURL(S3_DIR_POST,filenname);
+        String filename = post.getFilename();
+        String imageURL = s3Util.getImageURL(S3_DIR_POST,filename);
         return new PostResponseDto(post,imageURL);
     }
 

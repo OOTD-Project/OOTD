@@ -1,6 +1,7 @@
 package com.sparta_a5.ootd.user.entity;
 
 
+import com.sparta_a5.ootd.post.timestamped.Timestamped;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @NoArgsConstructor
-public class User {
+public class User extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,9 +45,25 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    private Long kakaoId;
+    private Long socialId;
 
-    public User(String username, String email , String password, UserRoleEnum role) { //회원가입
+    public User(String username, String email , String password, UserRoleEnum role) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = UserRoleEnum.USER;
+
+    }
+
+    public User(String username, String email, String password, UserRoleEnum role, Long socialId) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.socialId =socialId;
+    }
+
+    public User(String username, String email , String password, UserRoleEnum role, String filename) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -54,17 +71,8 @@ public class User {
         this.filename = "default_image.png";
     }
 
-    public User(String username, String email, String password, UserRoleEnum role, Long kakaoId) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.kakaoId =kakaoId;
-    }
-
-
-    public User kakaoIdUpdate(Long kakaoId) {
-        this.kakaoId = kakaoId;
+    public User socialIdUpdate(Long socialId) {
+        this.socialId = socialId;
         return this;
     }
 
@@ -78,5 +86,8 @@ public class User {
     public void setHeight(int height) { this.height = height; }
     public void setWeight(int weight) { this.weight = weight; }
 
+    public void setUserRole(UserRoleEnum userRole){
+        this.role = userRole;
+    }
 
 }

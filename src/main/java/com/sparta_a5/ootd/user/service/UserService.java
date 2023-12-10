@@ -1,6 +1,9 @@
 package com.sparta_a5.ootd.user.service;
 
 import com.sparta_a5.ootd.common.configuration.JwtUtil;
+import com.sparta_a5.ootd.common.s3.S3Const;
+import com.sparta_a5.ootd.common.s3.S3Util;
+import com.sparta_a5.ootd.post.entity.Post;
 import com.sparta_a5.ootd.user.dto.*;
 import com.sparta_a5.ootd.user.entity.User;
 import com.sparta_a5.ootd.user.entity.UserRoleEnum;
@@ -14,6 +17,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.sparta_a5.ootd.common.s3.S3Const.S3_DIR_POST;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -21,13 +26,14 @@ public class UserService {
         private final PasswordEncoder passwordEncoder;
         private final UserRepository userRepository;
         private final JwtUtil jwtUtil;
+        private final S3Util s3Util;
 
     @Transactional
-        public void signup(UserRequestDto userRequestDto) {
+        public UserResponseDto signup(UserRequestDto userRequestDto) {
            String username = userRequestDto.getUsername();
            String email = userRequestDto.getEmail();
            String password = passwordEncoder.encode(userRequestDto.getPassword());
-
+        String filename = userRequestDto.getFilename();
 
         Optional<User> found = userRepository.findByEmail(email);
         if (found.isPresent()) {
@@ -35,12 +41,13 @@ public class UserService {
         }
             UserRoleEnum role = UserRoleEnum.USER;
 
-            User user = new User(username, email, password, role);
+            User user = new User(username, email, password, role, filename);
             userRepository.save(user);
+        return new UserResponseDto(user);
         }
 
     @Transactional
-        public void login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
+        public UserResponseDto login(LoginRequestDto loginRequestDto, HttpServletResponse response) {
             String email = loginRequestDto.getEmail();
             String password = loginRequestDto.getPassword();
 
@@ -54,13 +61,16 @@ public class UserService {
             }
 
           jwtUtil.addJwtToCookie(jwtUtil.createToken(user.getUsername(), user.getRole()), response);
-
+        return new UserResponseDto(user);
         }
 
 
     @Transactional // 유저 조회
     public UserResponseDto getUserById(Long userId) {
-        return new UserResponseDto(getUser(userId));
+        User user = getUser(userId);
+        String filename = user.getFilename();
+        String imageURL = s3Util.getImageURL(S3_DIR_POST,filename);
+        return new UserResponseDto(user, imageURL);
     }
 
         @Transactional
@@ -73,12 +83,18 @@ public class UserService {
                 throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
             }user.setPassword(passwordEncoder.encode(updateRequestDto.getPassword()));
 
+            String filename = user.getFilename();
+            s3Util.deleteImage(S3_DIR_POST,filename);
+
+            String newFilename = s3Util.uploadImage(S3_DIR_POST,updateRequestDto.getImageFile());
+            updateRequestDto.setFilename(newFilename);
+
             user.setIntro(updateRequestDto.getIntro());
             user.setAge(updateRequestDto.getAge());
             user.setHeight(updateRequestDto.getHeight());
             user.setWeight(updateRequestDto.getWeight());
 
-            return new UserResponseDto(user);
+            return new UserResponseDto(user, s3Util.getImageURL(S3Const.S3_DIR_USER_PROFILE,newFilename));
         }
 
     private User getUser(Long id) { // id로 유저찾기 메서드

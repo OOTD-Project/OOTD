@@ -48,7 +48,7 @@ public class S3Util {
 
     //이미지 접근을 위한 URL 생성
     public String getImageURL(String classification, String filename) {
-        return S3Const.S3_BASEURL + classification + filename;
+        return S3Const.S3_BASEURL + classification + "/" + filename;
     }
 
     //확장자 추출 함수
