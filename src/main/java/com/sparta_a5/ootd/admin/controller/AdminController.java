@@ -5,6 +5,7 @@ import com.sparta_a5.ootd.admin.dto.SearchRequestDto;
 import com.sparta_a5.ootd.admin.service.AdminService;
 import com.sparta_a5.ootd.post.dto.PostResponseDto;
 import com.sparta_a5.ootd.user.dto.LoginRequestDto;
+import com.sparta_a5.ootd.user.dto.SignupRequestDto;
 import com.sparta_a5.ootd.user.dto.UserResponseDto;
 import com.sparta_a5.ootd.user.security.UserDetailsImpl;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,6 +22,12 @@ import java.util.List;
 public class AdminController {
 
     private final AdminService adminService;
+
+    @PostMapping("/signup")
+    public ResponseEntity<UserResponseDto> adminSignup(@RequestBody SignupRequestDto signupRequestDto){
+        return  ResponseEntity.ok(adminService.adminSignup(signupRequestDto));
+    }
+
     @PostMapping("/login")
     public void adminLogin(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response){
 
