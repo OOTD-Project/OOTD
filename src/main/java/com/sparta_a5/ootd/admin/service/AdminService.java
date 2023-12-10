@@ -10,6 +10,8 @@ import com.sparta_a5.ootd.post.entity.QPost;
 import com.sparta_a5.ootd.post.repository.PostQueryRepository;
 import com.sparta_a5.ootd.post.repository.PostRepository;
 import com.sparta_a5.ootd.user.dto.LoginRequestDto;
+import com.sparta_a5.ootd.user.dto.SignupRequestDto;
+import com.sparta_a5.ootd.user.dto.UserRequestDto;
 import com.sparta_a5.ootd.user.dto.UserResponseDto;
 import com.sparta_a5.ootd.user.entity.QUser;
 import com.sparta_a5.ootd.user.entity.User;
@@ -19,10 +21,12 @@ import com.sparta_a5.ootd.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.sparta_a5.ootd.user.entity.UserRoleEnum.ADMIN;
 
@@ -36,6 +40,32 @@ public class AdminService {
     private final PostQueryRepository postQueryRepository;
     private final UserQueryRepository userQueryRepository;
     private final JwtUtil jwtUtil;
+
+
+    @Value("${ADMIN_TOKEN}")
+    private String adminToken;
+
+    @Transactional
+    public UserResponseDto adminSignup(SignupRequestDto signupRequestDto){
+        String username = signupRequestDto.getUsername();
+        String email = signupRequestDto.getEmail();
+        String password = passwordEncoder.encode(signupRequestDto.getPassword());
+        String requestToken = signupRequestDto.getRequestToken();
+
+        if(!requestToken.equals(adminToken)){
+            throw new IllegalArgumentException("토큰이 일치하지 않습니다.");
+        }
+
+        Optional<User> found = userRepository.findByUsername(email);
+        if (found.isPresent()) {
+            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
+        }
+        UserRoleEnum role = UserRoleEnum.ADMIN;
+
+        User user = new User(username,email,password,role);
+        userRepository.save(user);
+        return new UserResponseDto(user);
+    }
 
     public void adminLogin(LoginRequestDto loginRequestDto, HttpServletResponse response) {
         String email = loginRequestDto.getEmail();
@@ -61,7 +91,7 @@ public class AdminService {
         BooleanBuilder builder = new BooleanBuilder();
 
         if(searchRequestDto.getClassification().equals("username")){
-            builder.and(QUser.user.username.eq(searchRequestDto.getKeyword()))
+            builder.and(QUser.user.username.contains(searchRequestDto.getKeyword()))
                     .and(QUser.user.createdAt.between(searchRequestDto.getStartDate(),searchRequestDto.getEndDate()));
         } else if (searchRequestDto.getClassification().equals("email")){
             builder.and(QUser.user.email.contains(searchRequestDto.getKeyword()))
