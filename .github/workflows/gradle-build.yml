@@ -20,7 +20,7 @@ jobs:
           mkdir ./src/main/resources
           touch ./src/main/resources/application.properties
           
-          echo spring.jpa.hibernate.ddl-auto=update >>./src/main/resources/application.properties
+          echo spring.jpa.hibernate.ddl-auto=none >>./src/main/resources/application.properties
           
           echo spring.datasource.url=${{ secrets.DATASOURCE_URL }} >>./src/main/resources/application.properties
           echo spring.datasource.username=${{ secrets.DATASOURCE_USERNAME }} >>./src/main/resources/application.properties
@@ -31,6 +31,7 @@ jobs:
           
           echo jwt.secret.key=${{ secrets.JWT_SECRET_KEY }} >>./src/main/resources/application.properties
           echo kk.client.id=${{ secrets.KAKAO_CLIENT_ID }} >>./src/main/resources/application.properties
+          echo na.client.id=${{ secrets.NAVER_CLIENT_ID }} >>./src/main/resources/application.properties
           
           echo aws.s3.bucket=${{ secrets.S3_BUCKET }} >>./src/main/resources/application.properties
           echo aws.s3.stack.auto=${{ secrets.S3_STACK_AUTO }} >>./src/main/resources/application.properties
