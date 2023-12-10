@@ -39,7 +39,7 @@ jobs:
           echo aws.s3.credentials.accessKey=${{ secrets.S3_CREDENTIALS_ACCESSKEY }} >>./src/main/resources/application.properties
           echo aws.s3.credentials.secretKey=${{ secrets.S3_CREDENTIALS_SECRETKEY }} >>./src/main/resources/application.properties
           
-          echo aws.ADMIN_TOKEN=${{ secrets.ADMIN_TOKEN }} >>./src/main/resources/application.properties
+          echo ADMIN_TOKEN=${{ secrets.ADMIN_TOKEN }} >>./src/main/resources/application.properties
 
       # JDK 17 설치
       - name: Set up JDK 17
