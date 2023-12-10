@@ -60,7 +60,8 @@ public class WebSecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
 
                         .requestMatchers("/api/users/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/api/admin/login").permitAll()
+                        .requestMatchers("/api/admin/signup").permitAll()
+                        .requestMatchers("/api/admin/login").permitAll()
 
                         .requestMatchers(HttpMethod.GET,"/api/posts/**").permitAll()
 

@@ -51,7 +51,7 @@ public class User extends Timestamped {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.role = UserRoleEnum.USER;
+        this.role = role;
 
     }
 
@@ -69,6 +69,12 @@ public class User extends Timestamped {
         this.password = password;
         this.role = UserRoleEnum.USER;
         this.filename = "default_image.png";
+    }
+
+    public User(String username, String password, UserRoleEnum role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
     }
 
     public User socialIdUpdate(Long socialId) {
