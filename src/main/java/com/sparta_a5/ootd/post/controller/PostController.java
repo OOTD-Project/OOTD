@@ -26,7 +26,6 @@ import static com.sparta_a5.ootd.common.s3.S3Const.S3_DIR_POST;
 public class PostController {
 
     private final PostService postService;
-    private final JwtUtil jwtUtil;
     private final S3Util s3Util;
 
     @PostMapping("")
@@ -35,8 +34,7 @@ public class PostController {
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ){
 
-        String filename = s3Util.uploadImage(S3_DIR_POST,postRequestDto.getImageFile());
-        postRequestDto.setFilename(filename);
+
         PostResponseDto postResponseDto = postService.createPost(postRequestDto, userDetails.getUser());
         return ResponseEntity.ok(postResponseDto);
     }
