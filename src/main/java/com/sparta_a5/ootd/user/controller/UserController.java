@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @PutMapping("/profile/{userId}")
-    public ResponseEntity<UserResponseDto> updateUser(@RequestBody UpdateRequestDto updateRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<UserResponseDto> updateUser(@ModelAttribute UpdateRequestDto updateRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         UserResponseDto userResponseDto = userService.updateUser(updateRequestDto,  userDetails);
         return ResponseEntity.ok(userResponseDto);
     }

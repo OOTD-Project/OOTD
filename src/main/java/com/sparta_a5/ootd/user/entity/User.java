@@ -46,12 +46,12 @@ public class User {
 
     private Long socialId;
 
-    public User(String username, String email , String password, UserRoleEnum role) { //회원가입
+    public User(String username, String email , String password, UserRoleEnum role) {
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = UserRoleEnum.USER;
-        this.filename = "default_image.png";
+
     }
 
     public User(String username, String email, String password, UserRoleEnum role, Long socialId) {
@@ -62,6 +62,13 @@ public class User {
         this.socialId =socialId;
     }
 
+    public User(String username, String email , String password, UserRoleEnum role, String filename) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = UserRoleEnum.USER;
+        this.filename = "default_image.png";
+    }
 
     public User socialIdUpdate(Long socialId) {
         this.socialId = socialId;
