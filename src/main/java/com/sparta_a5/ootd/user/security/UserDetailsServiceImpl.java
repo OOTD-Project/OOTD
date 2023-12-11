@@ -2,7 +2,6 @@ package com.sparta_a5.ootd.user.security;
 
 import com.sparta_a5.ootd.user.entity.User;
 import com.sparta_a5.ootd.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -3,8 +3,10 @@ package com.sparta_a5.ootd.user.service;
 import com.sparta_a5.ootd.common.configuration.JwtUtil;
 import com.sparta_a5.ootd.common.s3.S3Const;
 import com.sparta_a5.ootd.common.s3.S3Util;
-import com.sparta_a5.ootd.post.entity.Post;
-import com.sparta_a5.ootd.user.dto.*;
+import com.sparta_a5.ootd.user.dto.LoginRequestDto;
+import com.sparta_a5.ootd.user.dto.UpdateRequestDto;
+import com.sparta_a5.ootd.user.dto.UserRequestDto;
+import com.sparta_a5.ootd.user.dto.UserResponseDto;
 import com.sparta_a5.ootd.user.entity.User;
 import com.sparta_a5.ootd.user.entity.UserRoleEnum;
 import com.sparta_a5.ootd.user.repository.UserRepository;
@@ -17,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.sparta_a5.ootd.common.s3.S3Const.S3_DIR_POST;
+import static com.sparta_a5.ootd.common.s3.S3Const.S3_DIR_USER_PROFILE;
 
 @Service
 @Transactional
@@ -69,7 +71,7 @@ public class UserService {
     public UserResponseDto getUserById(Long userId) {
         User user = getUser(userId);
         String filename = user.getFilename();
-        String imageURL = s3Util.getImageURL(S3_DIR_POST,filename);
+        String imageURL = s3Util.getImageURL(S3_DIR_USER_PROFILE,filename); // S3_DIR/USER
         return new UserResponseDto(user, imageURL);
     }
 
@@ -84,9 +86,9 @@ public class UserService {
             }user.setPassword(passwordEncoder.encode(updateRequestDto.getPassword()));
 
             String filename = user.getFilename();
-            s3Util.deleteImage(S3_DIR_POST,filename);
+            s3Util.deleteImage(S3_DIR_USER_PROFILE,filename);
 
-            String newFilename = s3Util.uploadImage(S3_DIR_POST,updateRequestDto.getImageFile());
+            String newFilename = s3Util.uploadImage(S3_DIR_USER_PROFILE,updateRequestDto.getImageFile());
             updateRequestDto.setFilename(newFilename);
 
             user.setIntro(updateRequestDto.getIntro());

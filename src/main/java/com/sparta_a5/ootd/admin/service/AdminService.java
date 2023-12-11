@@ -1,9 +1,9 @@
 package com.sparta_a5.ootd.admin.service;
 
 import com.querydsl.core.BooleanBuilder;
+import com.sparta_a5.ootd.admin.dto.AdminUpdateRequestDto;
 import com.sparta_a5.ootd.admin.dto.SearchRequestDto;
 import com.sparta_a5.ootd.common.configuration.JwtUtil;
-import com.sparta_a5.ootd.admin.dto.AdminUpdateRequestDto;
 import com.sparta_a5.ootd.post.dto.PostResponseDto;
 import com.sparta_a5.ootd.post.entity.Post;
 import com.sparta_a5.ootd.post.entity.QPost;
@@ -11,7 +11,6 @@ import com.sparta_a5.ootd.post.repository.PostQueryRepository;
 import com.sparta_a5.ootd.post.repository.PostRepository;
 import com.sparta_a5.ootd.user.dto.LoginRequestDto;
 import com.sparta_a5.ootd.user.dto.SignupRequestDto;
-import com.sparta_a5.ootd.user.dto.UserRequestDto;
 import com.sparta_a5.ootd.user.dto.UserResponseDto;
 import com.sparta_a5.ootd.user.entity.QUser;
 import com.sparta_a5.ootd.user.entity.User;
@@ -27,8 +26,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
-import static com.sparta_a5.ootd.user.entity.UserRoleEnum.ADMIN;
 
 @Service
 @RequiredArgsConstructor
@@ -75,11 +72,7 @@ public class AdminService {
                 ()-> new IllegalArgumentException("등록된 유저가 없습니다.")
         );
 
-        if(passwordEncoder.matches(password,user.getPassword())){
-            if(user.getRole()!=ADMIN){
-                throw new IllegalArgumentException("권한이 없습니다.");
-            }
-        }else{
+        if(!passwordEncoder.matches(password,user.getPassword())){
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
@@ -108,10 +101,6 @@ public class AdminService {
     @Transactional
     public UserResponseDto updateUserRole(Long userId, AdminUpdateRequestDto requestDto, User adminUser) {
 
-        if(adminUser.getRole() != ADMIN){
-            throw new IllegalArgumentException("권한이 없습니다.");
-        }
-
         User user = userRepository.findById(userId).orElseThrow(
                 ()-> new IllegalArgumentException("존재하지 않는 사용자입니다.")
         );
@@ -122,10 +111,6 @@ public class AdminService {
 
     @Transactional
     public void deleteUser(Long userId, User adminUser) {
-
-        if(adminUser.getRole() != ADMIN){
-            throw new IllegalArgumentException("권한이 없습니다.");
-        }
 
         User user = userRepository.findById(userId).orElseThrow(
                 ()-> new IllegalArgumentException("존재하지 않는 사용자입니다.")
@@ -158,10 +143,6 @@ public class AdminService {
 
     @Transactional
     public void deletePost(Long postId, User adminUser) {
-
-        if(adminUser.getRole() != ADMIN){
-            throw new IllegalArgumentException("권한이 없습니다.");
-        }
 
         Post post = postRepository.findById(postId).orElseThrow(
                 ()-> new IllegalArgumentException("존재하지 않는 사용자입니다.")

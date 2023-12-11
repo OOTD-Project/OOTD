@@ -1,7 +1,6 @@
 package com.sparta_a5.ootd.common.configuration;
 
 import com.sparta_a5.ootd.user.entity.UserRoleEnum;
-
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;

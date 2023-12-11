@@ -1,12 +1,10 @@
 package com.sparta_a5.ootd.userPostLike.repository;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Order;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta_a5.ootd.userPostLike.entity.QUserPostLike;
 import com.sparta_a5.ootd.userPostLike.entity.UserPostLike;
 import jakarta.persistence.EntityManager;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

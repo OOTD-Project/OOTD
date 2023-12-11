@@ -1,24 +1,16 @@
 package com.sparta_a5.ootd.post.controller;
 
-import com.sparta_a5.ootd.common.configuration.JwtUtil;
 import com.sparta_a5.ootd.common.s3.S3Util;
 import com.sparta_a5.ootd.post.dto.PostRequestDto;
 import com.sparta_a5.ootd.post.dto.PostResponseDto;
 import com.sparta_a5.ootd.post.service.PostService;
-import com.sparta_a5.ootd.user.entity.User;
 import com.sparta_a5.ootd.user.security.UserDetailsImpl;
-import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static com.sparta_a5.ootd.common.s3.S3Const.S3_DIR_POST;
 
 @RestController
 @RequiredArgsConstructor
