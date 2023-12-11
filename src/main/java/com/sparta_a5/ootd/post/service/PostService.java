@@ -34,7 +34,7 @@ public class PostService {
     public List<PostResponseDto> getPostList() {
         List<Post> postList = postRepository.findAll();
         List<PostResponseDto> postResponseDtoList = postList.stream()
-                .map(PostResponseDto::new)
+                .map(post -> new PostResponseDto(post, s3Util.getImageURL(S3_DIR_POST,post.getFilename())))
                 .toList();
         return postResponseDtoList;
 

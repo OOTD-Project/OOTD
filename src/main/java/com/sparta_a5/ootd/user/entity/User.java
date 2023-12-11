@@ -3,10 +3,8 @@ package com.sparta_a5.ootd.user.entity;
 
 import com.sparta_a5.ootd.post.timestamped.Timestamped;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter

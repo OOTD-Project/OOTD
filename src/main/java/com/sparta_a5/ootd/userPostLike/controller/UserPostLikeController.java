@@ -1,9 +1,7 @@
 package com.sparta_a5.ootd.userPostLike.controller;
 
-import com.sparta_a5.ootd.post.dto.PostResponseDto;
 import com.sparta_a5.ootd.user.security.UserDetailsImpl;
 import com.sparta_a5.ootd.userPostLike.dto.UserPostLikeResponse;
-import com.sparta_a5.ootd.userPostLike.entity.UserPostLike;
 import com.sparta_a5.ootd.userPostLike.service.UserPostLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -3,7 +3,6 @@ package com.sparta_a5.ootd.comment;
 import com.sparta_a5.ootd.comment.dto.CommentRequestDTO;
 import com.sparta_a5.ootd.comment.dto.CommentResponseDTO;
 import com.sparta_a5.ootd.comment.entity.Comment;
-import com.sparta_a5.ootd.post.dto.PostResponseDto;
 import com.sparta_a5.ootd.post.entity.Post;
 import com.sparta_a5.ootd.post.repository.PostRepository;
 import com.sparta_a5.ootd.post.service.PostService;

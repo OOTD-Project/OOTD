@@ -1,11 +1,14 @@
 package com.sparta_a5.ootd.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sparta_a5.ootd.user.dto.*;
 import com.sparta_a5.ootd.common.configuration.JwtUtil;
-import com.sparta_a5.ootd.user.service.NaverService;
+import com.sparta_a5.ootd.user.dto.LoginRequestDto;
+import com.sparta_a5.ootd.user.dto.UpdateRequestDto;
+import com.sparta_a5.ootd.user.dto.UserRequestDto;
+import com.sparta_a5.ootd.user.dto.UserResponseDto;
 import com.sparta_a5.ootd.user.security.UserDetailsImpl;
 import com.sparta_a5.ootd.user.service.KakaoService;
+import com.sparta_a5.ootd.user.service.NaverService;
 import com.sparta_a5.ootd.user.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
