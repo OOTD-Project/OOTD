@@ -99,7 +99,7 @@ public class AdminService {
     }
 
     @Transactional
-    public UserResponseDto updateUserRole(Long userId, AdminUpdateRequestDto requestDto, User adminUser) {
+    public UserResponseDto updateUserRole(Long userId, AdminUpdateRequestDto requestDto) {
 
         User user = userRepository.findById(userId).orElseThrow(
                 ()-> new IllegalArgumentException("존재하지 않는 사용자입니다.")
@@ -110,7 +110,7 @@ public class AdminService {
     }
 
     @Transactional
-    public void deleteUser(Long userId, User adminUser) {
+    public void deleteUser(Long userId) {
 
         User user = userRepository.findById(userId).orElseThrow(
                 ()-> new IllegalArgumentException("존재하지 않는 사용자입니다.")
@@ -142,7 +142,7 @@ public class AdminService {
     }
 
     @Transactional
-    public void deletePost(Long postId, User adminUser) {
+    public void deletePost(Long postId) {
 
         Post post = postRepository.findById(postId).orElseThrow(
                 ()-> new IllegalArgumentException("존재하지 않는 사용자입니다.")
