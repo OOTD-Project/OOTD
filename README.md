@@ -38,7 +38,8 @@ https://www.youtube.com/watch?v=0wFef7QwDNM
 
 ### 와이어프레임
 
-https://www.figma.com/embed?embed_host=notion&url=https%3A%2F%2Fwww.figma.com%2Ffile%2FgyViQ7UiqtaYi5QguiGfYT%2F%EC%98%B7%EC%A1%B0%EB%9D%BC%EA%B5%AC%3Ftype%3Ddesign%26node-id%3D0-1%26mode%3Ddesign%26t%3DDWyOumRRgKtS9Ka0-0
+![image](https://github.com/OOTD-Project/OOTD/assets/63050400/d98fb57f-6b12-478e-8e0f-30b5526cd28e)
+
 
 
 - 커밋 컨밴션
